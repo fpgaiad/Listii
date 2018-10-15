@@ -39,6 +39,23 @@ public class MainActivity extends AppCompatActivity implements br.com.fpgaiad.cl
     }
 
     /**
+     * Methods triggered by the user
+     * @param view
+     */
+    public void buttonAddTaskClicked(View view) {
+        String task = editTextInputTask.getText().toString();
+        if (task.equals("")) {
+            Toast.makeText(getApplicationContext(), "Sorry! Nothing to add here",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        presenter.addTask(task);
+        Toast.makeText(getApplicationContext(), "Task \"" + task + "\" added!",
+                Toast.LENGTH_SHORT).show();
+        editTextInputTask.getText().clear();
+    }
+
+    /**
      * Methods triggered by the presenter
      * @param list
      */
@@ -47,13 +64,4 @@ public class MainActivity extends AppCompatActivity implements br.com.fpgaiad.cl
         mainRecyclerView.setAdapter(new TaskListAdapter(list));
     }
 
-    /**
-    * Methods triggered by the user
-    */
-    public void addTaskButtonClicked(View view) {
-        String task = editTextInputTask.getText().toString();
-        Toast.makeText(getApplicationContext(), "Task \"" + task + "\" added!", Toast.LENGTH_SHORT).show();
-        editTextInputTask.getText().clear();
-        presenter.addTask(task);
-    }
 }
