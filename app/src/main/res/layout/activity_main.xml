@@ -11,13 +11,10 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:gravity="center"
-        android:paddingBottom="32dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
         android:text="@string/list_title"
         android:textColor="@android:color/white"
-        android:textSize="92sp"
+        android:textSize="86sp"
         android:textStyle="bold" />
 
     <android.support.design.widget.TextInputLayout
@@ -43,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:onClick="buttonAddTaskClicked"
+        android:onClick="onButtonAddTaskClicked"
         android:gravity="end"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="48dp"

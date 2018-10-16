@@ -14,7 +14,10 @@ public class ModelImpl implements Model {
         list.add(task);
     }
 
-
+    @Override
+    public void deleteFromList(int index) {
+        list.remove(index);
+    }
 
     @Override
     public List<String> returnActualList() {

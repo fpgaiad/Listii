@@ -9,11 +9,19 @@ import br.com.fpgaiad.cleanmvp.view.View;
 public class PresenterImpl implements Presenter {
 
     public View view;
-    public Model model;
-    public List<String> list;
+    private Model model;
+    private List<String> list;
 
     public PresenterImpl(View view) {
         this.view = view;
+    }
+
+    /**
+     * Presenter internal method
+     */
+    private void buildList() {
+        list = getList();
+        loadList(list);
     }
 
     /**
@@ -28,12 +36,15 @@ public class PresenterImpl implements Presenter {
             model = new ModelImpl();
         }
         model.addToList(task);
-        list = getList();
-        loadList(list);
+        buildList();
     }
 
     @Override
     public void deleteTask(int index) {
+        if (list != null) {
+            model.deleteFromList(index);
+            buildList();
+        }
     }
 
     /**
@@ -45,7 +56,7 @@ public class PresenterImpl implements Presenter {
     }
 
     /**
-     * Methods triggered by the Presenter layer
+     * Methods triggered by this Presenter layer
      * to the View layer
      * @param list
      */

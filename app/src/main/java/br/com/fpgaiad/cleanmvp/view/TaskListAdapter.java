@@ -14,9 +14,16 @@ import br.com.fpgaiad.cleanmvp.R;
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ListViewHolder> {
 
     private final List<String> list;
+    private final ListItemClickListener mOnClickListener;
 
-    public TaskListAdapter(List<String> list) {
+
+    public TaskListAdapter(List<String> list, ListItemClickListener listener) {
         this.list = list;
+        mOnClickListener = listener;
+    }
+
+    public interface ListItemClickListener {
+        void onButtonDeleteTaskClicked(int clickedItemIndex);
     }
 
     @NonNull
@@ -39,7 +46,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ListVi
         return list == null ? 0 : list.size();
     }
 
-    class ListViewHolder extends RecyclerView.ViewHolder {
+    class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView taskName;
         TextView taskIndex;
 
@@ -47,6 +54,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ListVi
             super(itemView);
             taskIndex = itemView.findViewById(R.id.tv_task_index);
             taskName = itemView.findViewById(R.id.tv_task_name);
+            itemView.findViewById(R.id.iv_delete_icon).setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mOnClickListener.onButtonDeleteTaskClicked(getAdapterPosition());
         }
     }
 
