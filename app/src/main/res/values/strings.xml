@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">Task!</string>
+    <string name="app_name">list.ii</string>
     <string name="default_value">10</string>
     <string name="hint_et_input_task">New task</string>
     <string name="label_btn_add_task">add</string>
     <string name="delete_icon">delete icon</string>
-    <string name="list_title">Task!</string>
 </resources>

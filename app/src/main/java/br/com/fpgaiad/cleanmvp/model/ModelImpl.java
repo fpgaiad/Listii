@@ -11,7 +11,7 @@ public class ModelImpl implements Model {
         if (list == null) {
             list = new ArrayList<>();
         }
-        list.add(task);
+        list.add(0, task);
     }
 
     @Override
