@@ -16,76 +16,52 @@ import android.widget.Toast;
 import java.util.List;
 
 import br.com.fpgaiad.cleanmvp.R;
-import br.com.fpgaiad.cleanmvp.presenter.Presenter;
-import br.com.fpgaiad.cleanmvp.presenter.PresenterImpl;
+import br.com.fpgaiad.cleanmvp.model.TasksRepositoryImpl;
+import br.com.fpgaiad.cleanmvp.presenter.TaskPresenter;
+import br.com.fpgaiad.cleanmvp.presenter.TaskPresenterImpl;
 
-public class MainActivity extends AppCompatActivity implements br.com.fpgaiad.cleanmvp.view.View, TaskListAdapter.ListItemClickListener {
+public class MainActivity extends AppCompatActivity implements TasksView {
 
-    private Presenter presenter;
+    private TaskPresenter presenter;
     private RecyclerView mainRecyclerView;
     private EditText editTextInputTask;
-    private List<String> mList;
-    private Toast mToast = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        presenter = new PresenterImpl(this);
+        presenter = new TaskPresenterImpl(this, new TasksRepositoryImpl());
         editTextInputTask = findViewById(R.id.et_input_task);
         mainRecyclerView = findViewById(R.id.rv_main);
         mainRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    /**
-     * MainActivity internal method
-     */
-    private void verifyToastStatus() {
-        if (mToast != null) {
-            mToast.cancel();
-        }
+    @Override
+    public void showTaskList(List<String> list) {
+        mainRecyclerView.setAdapter(new TaskListAdapter(list, clickListener));
     }
 
-    /**
-     * Methods triggered by the user
-     * @param view
-     */
     public void onButtonAddTaskClicked(View view) {
         String task = editTextInputTask.getText().toString();
-        if (task.equals("")) {
-            verifyToastStatus();
-            String emptyTaskMessage = "Sorry! Nothing to add here";
-            mToast = Toast.makeText(getApplicationContext(), emptyTaskMessage, Toast.LENGTH_SHORT);
-            mToast.show();
-            return;
+        presenter.onAddTaskClicked(task);
+    }
+
+    public View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String task = (String) view.getTag();
+            presenter.onDeleteTaskClicked(task);
         }
-        presenter.addTask(task);
-        verifyToastStatus();
-        String addTaskMessage = "\"" + task + "\"\nADDED";
-        mToast = Toast.makeText(getApplicationContext(), addTaskMessage, Toast.LENGTH_SHORT);
-        mToast.show();
+    };
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void cleanTaskInput() {
         editTextInputTask.getText().clear();
     }
-
-    @Override
-    public void onButtonDeleteTaskClicked(int clickedItemIndex) {
-        String task = mList.get(clickedItemIndex);
-        verifyToastStatus();
-        String deleteTaskMessage = "\"" + task + "\"\nDELETED";
-        mToast = Toast.makeText(this, deleteTaskMessage, Toast.LENGTH_LONG);
-        mToast.show();
-        presenter.deleteTask(clickedItemIndex);
-    }
-
-    /**
-     * Method triggered by the presenter
-     * @param list
-     */
-    @Override
-    public void refresh(List<String> list) {
-        mainRecyclerView.setAdapter(new TaskListAdapter(list, this));
-        mList = list;
-    }
-
 }
